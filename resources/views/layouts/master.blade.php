@@ -36,7 +36,15 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/login">Войти</a></li>
+					@guest
+					<li><a href="{{ route('login') }}">Админка</a></li>
+					<li><a href="{{ route('register') }}">Зарегистрироваться</a></li>
+					@endguest
+
+					@auth
+					<li><a href="{{ route('home') }}">Админка</a></li>
+					<li><a href="{{ route('get-logout') }}">Выйти</a></li>
+					@endauth
 				</ul>
 			</div>
 		</div>
@@ -49,7 +57,9 @@
 			@elseif(session()->has("warning"))
 			<p class="alert alert-warning">{{ session()->get("warning") }}</p>
 			@endif
-			@yield("content")
+			<div style="display:flex; flex-direction: column; align-items: center;">
+				@yield("content")
+			</div>
 		</div>
 	</div>
 
