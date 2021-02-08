@@ -7,6 +7,8 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 
 Auth::routes([
 	"reset" => false,
@@ -15,10 +17,17 @@ Auth::routes([
 ]);
 Route::get('/logout', [LoginController::class, 'logout'])->name("get-logout");
 
-Route::group(['middleware' => 'auth', 'namespace' => 'Admin'], function() {
+Route::group([
+	'middleware' => 'auth',
+	// 'namespace' => 'Admin',
+	'prefix' => 'admin',
+], function() {
 	Route::group(['middleware' => 'is_admin'], function() {
 		Route::get('/orders', [OrderController::class, 'index'])->name('home');
 	});
+
+	Route::resource('categories', CategoryController::class);
+	Route::resource('products', ProductController::class);
 });
 
 Route::get('/', [MainController::class, 'index'])->name("index");
